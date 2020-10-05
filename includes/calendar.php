@@ -71,7 +71,7 @@ class Calendar extends Dbcon{
             if($result){
                 foreach ($result as $key => $row){
                     if($row["date_de_visite"] == $date){
-                        $calendar.= "<button class='btn btn-success' data-toggle='collapse' data-target='#res".$row["visite_id"]."'>" . $row['visite_id']. "</button>";
+                        $calendar.= "<button class='btn btn-success' data-toggle='collapse' data-target='#res".$row["visite_id"]."'> &bull;</button>";
                     }
                 }
             }
