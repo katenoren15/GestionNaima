@@ -5,39 +5,69 @@ session_start();
     $crud = new Dbcon();
 
     $prospect_id = $_GET["id"];
-    $_SESSION["prospect"] = $prospect_id;
-    $p_id = $_SESSION["p_id"];
-    $sql = "SELECT * FROM prospect, client_cat WHERE prospect.categorie = client_cat.client_cat_id AND prospect_id = $prospect_id";
+   // $_SESSION["prospect"] = $prospect_id;
+    //$p_id = $_SESSION["p_id"];
+    $sql = "SELECT * FROM customer, client_cat WHERE customer.categorie = client_cat.client_cat_id AND customer_id = $prospect_id";
     $result = $crud->get($sql);
 
-    $sql1 = "SELECT * FROM visite WHERE prospect_id = $prospect_id";
+    $sql1 = "SELECT * FROM visite WHERE customer_id = $prospect_id";
     $result1 = $crud->read($sql1);
 
-    $sql2 = "SELECT * FROM prospect_observation WHERE prospect_id = $prospect_id";
+    $sql2 = "SELECT * FROM customer_observation WHERE customer_id = $prospect_id ORDER BY date_observation";
     $result2 = $crud->read($sql2);
 
 
 ?>
 <section>
     <div class="container-fluid">
-        <div class="row mt-4">
-            <div class="col-md-10 ml-auto">
-                <div class="jumbotron pt-2 pb-2">
-                    <h1><?php echo $result["nom"] . " " . $result["prenoms"] ?></h1> 
-                    <p>Code Prospect: <?php echo $result["prospect_id"];?></p>
-                    <p>Cat&eacute;gorie: <?php echo $result["client_cat_name"];?></p>
-                    <p>Email: <?php echo $result["email"];?></p>
-                    <p>Telephone: <?php echo $result["telephone"];?></p>
-                    <p>Adresse: <?php echo $result["adresse"];?></p>
-                    <p>Activit&eacute;: <?php echo $result["activite"];?></p>
-                    <p>Connaissance du produit: <?php echo $result["connaissance"];?></p>
-                    <p>Potentiel d'achat: <?php echo $result["potentiel_achat"];?></p>
-                    <button type="button" class="btn btn-outline-primary editbtn" value="<?= $row["prospect_id"]; ?>" data-toggle="modal" data-target="#editprosp">Modifier</button>
-                </div>
+        <div class="row mt-5">
+            <div class="col-md-11 ml-auto">
+            <h2 class="text-center mt-2"><?php echo $result["nom"] . " " . $result["prenoms"] ?></h2> 
+                <div class="jumbotron p-2 mt-3">
+                    <div class="d-flex">
+                        <div class="p-2"><img src="../images/avatar.jpg" class="float-left align-self-center"/></div>
+                        <div class="p-2 flex-grow-1">
+                            <table class="table table-sm">
+                                <tr class="">
+                                    <td class="font-weight-bold col-4"><p>Code Prospect: </p></td><td class=""><?php echo $result["customer_id"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold"><p>Cat&eacute;gorie: </p></td><td class=""><?php echo $result["client_cat_name"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold col-4"><p>Email:</td><td class=""><?php echo $result["email"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold col-4"><p>T&eacute;l&eacute;phone: </p></td><td class=""><?php echo $result["telephone"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold col-4"><p>Adresse: </p></td><td class=""><?php echo $result["adresse"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold col-4"><p>Activit&eacute;: </p></td><td class=""><?php echo $result["activite"];?></td>
+                                </tr>  
+                            </table>
+                        </div>
+                        <div class="p-2 flex-grow-1">
+                            <table class="table table-sm">
+                                <tr class="">
+                                    <td class="font-weight-bold"><p>Connaisance des Produits: </p></td><td class=""><?php echo $result["connaissance"];?></td>
+                                </tr>
+                                <tr class="">
+                                    <td class="font-weight-bold"><p>Potentiel d'achat: </p></td><td class=""><?php echo $result["potentiel_achat"];?></td>
+                                </tr>
+                            </table>
+                            <div class="text-center">
+                                <a class="btn btn-warning" href="edit.php?type=modifyprosp&prospect=<?php echo $prospect_id; ?>">Modifier</a></br></br>
+                                <a class="btn btn-success" href="prospect_action.php?makeclient=<?= $result['customer_id']; ?>">Transformer en client</a>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
+        </div>
         <div class="row justify-content-center mt-2">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <?php if(isset($_SESSION["response"])){ ?>
                     <div class="alert text-center alert-<?= $_SESSION["res_type"]; ?> alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -47,11 +77,13 @@ session_start();
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-5 ml-auto">
+            <div class="col-md-6 ml-auto">
                 <table class="table table-bordered">
-                    <tr>
-                        <td><h2>Exigences</h2></td>
-                    </tr>
+                    <thead class="thead-light">
+                        <tr>
+                            <td class="text-dark"><h2>Exigences</h2></td>
+                        </tr>
+                    </thead>
                     <tr>
                         <td><?php echo $result["exigence"];?></td>
                     </tr>
@@ -63,30 +95,32 @@ session_start();
                         <td><h2>Besoins</h2></td>
                     </tr>
                     <tr>
-                        <td><?php echo $result["besoins"];?></td>
+                        <td><?php echo $result["nature_besoins"];?></td>
                     </tr>
                 </table>
             </div>
         </div>
         <div class="row mt-3">
-            <div class="col-md-10 ml-auto">
+            <div class="col-md-11 ml-auto">
             <nav class="navbar">
-                <h2 class="">Observations</h2>
-                <button class="btn btn-primary mt-1" data-toggle="modal" data-target="#addobs">&plus;&nbsp;Observation</button>
+                <h3 class="">Observations</h3>
+                <button class="btn btn-warning mt-1" data-toggle="modal" data-target="#addobs">&plus;&nbsp;Observation</button>
             </nav>
             <div class="table-responsive">
-            <table class="table table-bordered">
-                    <tr class="d-flex">
-                        <th class="col-2">Date d'observation</th>
-                        <th class="col-7">Observation</th>
-                        <th class="col-3 text-center" colspan="2">Actions</th>
-                    </tr>
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr class="d-flex">
+                            <th class="col-2 text-dark">Date d'observation</th>
+                            <th class="col-7 text-dark">Observation</th>
+                            <th class="col-3 text-dark text-center" colspan="2">Actions</th>
+                        </tr>
+                    </thead>
                     <?php foreach($result2 as $key => $row){ ?>
                     <tr class="d-flex">
                         <td class="col-2"><?php echo $row["date_observation"];?></td>
                         <td class="col-7"><?php echo $row["observation"];?></td>
-                        <td class="col"><button class="btn btn-outline-primary mx-auto d-block editobs" data-toggle="modal" data-target="#editobs">Modifier</button></td>
-                        <td class="col"><a href="viewprospect.php?delete=<?= $p_id; ?>" class="btn btn-outline-danger mx-auto d-block" onclick="return confirm('Voulez-vous supprimer cette observation?');">Supprimer</a></td>
+                        <td class="col"><a href="edit.php?type=modifyobs&obs=<?php echo $row["obs_id"];?>&p=<?= $prospect_id; ?>" class="btn btn-outline-primary">Modifier</a></td>
+                        <td class="col"><a href="prospect_action.php?deleteo=<?php echo $row["obs_id"];?>&p=<?= $prospect_id; ?>" class="btn btn-outline-danger mx-auto d-block" onclick="return confirm('Voulez-vous supprimer cette observation?');">Supprimer</a></td>
                     </tr>
                     <?php } ?>
                 </table>
@@ -94,21 +128,23 @@ session_start();
             </div>
         </div>
         <div class="row mt-3 mb-3">
-            <div class="col-md-10 ml-auto">
+            <div class="col-md-11 ml-auto">
                 <nav class="navbar">
-                    <h2 class="">Visites</h2>
-                    <button class="btn btn-primary mt-1" data-toggle="modal" data-target="#addv">&plus;&nbsp;Visite</button>
+                    <h3 class="">Visites</h3>
+                    <button class="btn btn-warning mt-1" data-toggle="modal" data-target="#addv">&plus;&nbsp;Visite</button>
                 </nav>
                 <table class="table table-bordered">
-                    <tr>
-                        <th>N&deg; Visite</th>
-                        <th>Date de Visite</th>
-                        <th>Objet de Visite</th>
-                        <th>Resultats</th>
-                        <th>&Agrave; R&eacute;lancer</th>
-                        <th>Date de R&eacute;lance</th>
-                        <th colspan="2">Actions</th>
-                    </tr>
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-dark">N&deg; Visite</th>
+                            <th class="text-dark">Date de Visite</th>
+                            <th class="text-dark">Objet de Visite</th>
+                            <th class="text-dark">Resultats</th>
+                            <th class="text-dark">&Agrave; R&eacute;lancer</th>
+                            <th class="text-dark">Date de R&eacute;lance</th>
+                            <th class="text-dark text-center" colspan="2">Actions</th>
+                        </tr>
+                    </thead>
                     <?php foreach($result1 as $key => $row){ ?>
                     <tr>
                         <td><?php echo $row["visite_id"];?></td>
@@ -117,12 +153,14 @@ session_start();
                         <td><?php echo $row["resultats"];?></td>
                         <td><?php echo $row["a_relancer"];?></td>
                         <td><?php echo $row["date_de_relance"];?></td>
-                        <td><a href="viewprospect.php?id=<?= $row["visite_id"]; ?>" class="btn btn-outline-info editv">Modifier</a></td>
-                        <td><a href="viewprospect.php?id=<?= $row["visite_id"]; ?>" class="btn btn-outline-danger">Supprimer</a></td>
+                        <td><a href="edit.php?type=modifyvisite&visite=<?= $row["visite_id"];?>&prospect=<?php echo $prospect_id; ?>" class="btn btn-outline-primary editv">Modifier</a></td>
+                        <td><a href="prospect_action.php?deletev=<?= $row["visite_id"];?>&p=<?= $prospect_id; ?>" class="btn btn-outline-danger" onclick="return confirm('Voulez-vous supprimer cette visite?');">Supprimer</a></td>
                     </tr>
                     <?php } ?>
-                </table> <a href="prospect_action.php?delete=<?= $result["prospect_id"]; ?>" class="btn btn-outline-danger mt-5 mx-auto d-block" onclick="return confirm('Voulez-vous supprimer ce prospect?');">Supprimer</a>
-
+                </table> 
+                <div class="text-center">
+                    <a href="prospect_action.php?delete=<?= $result["customer_id"]; ?>" class="btn btn-danger mt-5 justify-content-center" onclick="return confirm('Voulez-vous supprimer ce prospect?');">Supprimer</a>
+                </div>
             </div>
             
         </div>
@@ -266,6 +304,7 @@ session_start();
             </div>
             <div class="modal-body">
                 <form action="prospect_action.php" method="POST" id="live_form">
+                <input type="text" value/>
                     <div class="form-group">
                         <label for="date-obs">Date d'Observation<span class="text-danger">*</span></label>
                         <input type="text" name="date-obs" id="date-obs" class="form-control datepicker" required/>
@@ -287,7 +326,7 @@ session_start();
 </div>
 <div class="modal fade" id="addv">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-center">Ajouter une visite</h4>
@@ -310,7 +349,7 @@ session_start();
                     </div>
                     <div class="form-group">
                         <label for="resultats">R&eacute;sultats<span class="text-danger">*</span></label>
-                        <input type="text" name="resultats" id="resultats" class="form-control" required/>
+                        <textarea name="resultats" id="resultats" class="form-control" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="relance">&Agrave; R&eacute;lancer<span class="text-danger">*</span></label>

@@ -19,8 +19,8 @@ switch (@$page){
     case "rapports":
         include ("rapports.php");
         break; 
-    case "parametres":
-        include ("parametres.php");
+    case "reglages":
+        include ("reglages.php");
         break;
 }   
 

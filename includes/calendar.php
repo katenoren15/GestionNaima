@@ -6,7 +6,7 @@ class Calendar extends Dbcon{
     function build_calendar($month, $year){
         setlocale(LC_TIME, "fr_FR");
 
-        $sql = "SELECT * FROM visite, prospect WHERE MONTH(visite.date_de_visite) = '$month' and YEAR(visite.date_de_visite) =  '$year' and prospect.prospect_id = visite.prospect_id ORDER BY visite.date_de_visite";
+        $sql = "SELECT * FROM visite, customer WHERE MONTH(visite.date_de_visite) = '$month' and YEAR(visite.date_de_visite) =  '$year' and customer.customer_id = visite.customer_id ORDER BY visite.date_de_visite";
         $result = $this->read($sql);
 
         $daysOfWeek = array('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
@@ -31,15 +31,15 @@ class Calendar extends Dbcon{
         $calendar = "<div class='table-responsive'>";
         $calendar .= "<table class='table table-bordered' id='calendar'>";
         $calendar.= "<div class='d-flex p-2 justify-content-around'>";
-        $calendar.= "<a class='btn btn-primary text-center align-self-center btn-sm' href='?page=tableau&month=".strftime('%m', mktime(0,0,0, $month-1, 1, $year))."&year=".strftime('%Y', mktime(0,0,0, $month-1, 1, $year))."'>Mois Precedente</a>";
+        $calendar.= "<a class='btn btn-warning text-center align-self-center btn-sm' href='?page=tableau&month=".strftime('%m', mktime(0,0,0, $month-1, 1, $year))."&year=".strftime('%Y', mktime(0,0,0, $month-1, 1, $year))."'><i class='fas fa-backward'></i></a>";
         $calendar.= "<h2 class='text-center'>$monthName $year</h2>";
-        $calendar.= "<a href='?page=tableau&month=".strftime('%m', mktime(0,0,0, $month+1, 1, $year))."&year=".strftime('%Y', mktime(0,0,0, $month+1, 1, $year))."' class='btn btn-primary text-center align-self-center btn-sm'>Mois Prochaine</a>";
+        $calendar.= "<a href='?page=tableau&month=".strftime('%m', mktime(0,0,0, $month+1, 1, $year))."&year=".strftime('%Y', mktime(0,0,0, $month+1, 1, $year))."' class='btn btn-warning text-center align-self-center btn-sm'><i class='fas fa-forward'></i></a>";
 
         $calendar.= "</div>";
         $calendar.= "<tr>";
 
         foreach ($daysOfWeek as $day){
-            $calendar.= "<th class='header thead-light text-center'>$day</th>";
+            $calendar.= "<th class='header text-center' style='background-color:#C0C0C0;'>$day</th>";
         }
 
         $calendar.= "</tr><tr>";
@@ -71,7 +71,7 @@ class Calendar extends Dbcon{
             if($result){
                 foreach ($result as $key => $row){
                     if($row["date_de_visite"] == $date){
-                        $calendar.= "<button class='btn btn-success' data-toggle='collapse' data-target='#res".$row["visite_id"]."'> &bull;</button>";
+                        $calendar.= "<button class='btn btn-sm btn-success' data-toggle='collapse' data-target='#res".$row["visite_id"]."'> &bull;</button>";
                     }
                 }
             }

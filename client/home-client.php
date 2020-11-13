@@ -3,7 +3,7 @@ include_once "../includes/config.php";
 $crud2 = new Dbcon();
 
 
-$sql = "SELECT COUNT(*) as clients FROM client";
+$sql = "SELECT COUNT(*) as clients FROM customer WHERE customer_type = 'Client'";
 $result = $crud2->get($sql);
 
 $sql2 = "SELECT COUNT(*) as visite FROM visite WHERE date_de_visite = CURRENT_DATE()";
@@ -12,15 +12,15 @@ $result2 = $crud2->get($sql2);
 ?>
 <section>
     <div class="container-fluid">
-    <div class="row mt-2">
-            <div class="col-md-10 ml-auto">
+    <div class="row mt-5">
+            <div class="col-md-11 ml-auto">
                 <br>
                 <h2 class="text-dark text-sm-center">Tableau de Bord</h2>
                 <div class="text-right"></div>
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-md-10 ml-auto">
+            <div class="col-md-11 ml-auto">
                 <div class="card-deck">
                     <div class="card bg-primary">
                         <div class="card-body text-center">

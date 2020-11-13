@@ -7,14 +7,14 @@ $result = $crud2->read($sql);
 ?>
 <section>
     <div class="container-fluid">
-        <div class="row mt-4">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+        <div class="row mt-5">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <h1 class="text-center">Pipeline</h1>
                 <h4 class="text-center">(vue d'ensemble des prospection)</h4>
             </div>
         </div>
         <div class="row justify-content-center mt-4">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <?php if(isset($_SESSION["response"])){ ?>
                     <div class="alert text-center alert-<?= $_SESSION["res_type"]; ?> alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -28,7 +28,7 @@ $result = $crud2->read($sql);
 <section>
     <div class="container-fluid">
         <div class="row mb-5">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <div class="row">
                     <div class="col-xl-3 col-12 mb-4 mb-xl-0">
                         <div class="card card-commons" style="background-color: #ffd570">

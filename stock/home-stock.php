@@ -24,15 +24,15 @@ $result2 = $crud2->get($sql2);
 </style>
 <section>
     <div class="container-fluid">
-        <div class="row mt-2">
-            <div class="col-md-10 ml-auto">
+        <div class="row mt-5">
+            <div class="col-md-11 ml-auto">
                 <br>
                 <h2 class="text-dark text-sm-center">Tableau de Bord</h2>
                 <div class="text-right"></div>
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-xl-8 col-sm-8 col-md-12 p-2">
+            <div class="col-xl-8 col-sm-8 col-md-11 p-2 ml-auto">
                  <div class="card card-common">
                     <div class="card-body">
                         <div class="">
@@ -55,7 +55,7 @@ $result2 = $crud2->get($sql2);
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-md-10 ml-auto">
+            <div class="col-md-11 ml-auto">
                 <div class="card-deck">
                     <div class="card bg-primary">
                         <div class="card-body text-center">

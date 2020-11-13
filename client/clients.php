@@ -2,17 +2,20 @@
 include_once "../includes/config.php";
 $crud2 = new Dbcon();
 
-$sql = "SELECT * FROM client, client_cat WHERE client.client_cat_id = client_cat.client_cat_id";
+$sql = "SELECT * FROM customer, client_cat WHERE customer.customer_type = 'Client' AND customer.categorie = client_cat.client_cat_id ORDER BY insert_date desc";
 $result = $crud2->read($sql);
 
 $sql2 = "SELECT * FROM client_cat";
 $result2 = $crud2->read($sql2);
+
+$sql3 = "SELECT COUNT(*) as clients FROM customer WHERE customer_type = 'Client'";
+$result3 = $crud2->get($sql3);
 ?>
 <section>
     <div class="container-fluid">
-        <div class="row mt-3">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
-                <div class="jumbotron pt-4 pb-4">
+        <div class="row mt-5">
+            <div class="col-xl-11 col-lg-9 col-md-8 ml-auto">
+                <div class="jumbotron pt-4 pb-4 mt-3">
                     <h1>Clients</h1>
                     <nav class="navbar">
                     <button class="btn btn-primary mt-1 navbar-brand" data-toggle="modal" data-target="#addclient">&plus;&nbsp;Client</button>
@@ -24,7 +27,7 @@ $result2 = $crud2->read($sql2);
             </div>
         </div>
         <div class="row justify-content-center mt-2">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-9 col-md-8 ml-auto">
                 <?php if(isset($_SESSION["response"])){ ?>
                     <div class="alert text-center alert-<?= $_SESSION["res_type"]; ?> alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -33,35 +36,40 @@ $result2 = $crud2->read($sql2);
                 <?php } unset($_SESSION["response"]); ?>
             </div>
         </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-xl-11 col-lg-9 col-md-8 ml-auto">
+                <h5><b>Nombre de clients: </b><?= $result3["clients"] ?></h5>
+            </div>
+        </div>
         <div class="row mb-5">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-9 col-md-8 ml-auto">
                 <div class="table-responsive" id="result">
                     <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th><a class="column_sort" id="billNo" data-order="desc" href="#">Code Client</a></th>
-                            <th><a class="column_sort" id="reservationNo" data-order="desc" href="#">Nom</a></th>
-                            <th><a class="column_sort" id="reductions" data-order="desc" href="#">Cat&eacute;gorie</a></th>
-                            <th><a class="column_sort" id="billingDate" data-order="desc" href="#">Email</a></th>
-                            <th><a class="column_sort" id="reductions" data-order="desc" href="#">Téléphone</a></th>
-                            <th><a class="column_sort" id="reductions" data-order="desc" href="#">Adresse</a></th>
-                            <th colspan="2" class="text-center">Actions</th>
-                        </tr>
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-dark">Code Client</th>
+                                <th class="text-dark">Nom</a></th>
+                                <th class="text-dark">Cat&eacute;gorie</th>
+                                <th class="text-dark">Email</th>
+                                <th class="text-dark">Téléphone</th>
+                                <th class="text-dark">Adresse</th>
+                                <th colspan="2" class="text-center text-dark">Actions</th>
+                            </tr>
                         </thead>
                         <tbody id="clientTable">
                         <?php foreach($result as $key => $row){ ?>
                             <tr>
-                                <td><?= $row["client_id"];?></td>
+                                <td><?= $row["customer_id"];?></td>
                                 <td><?= $row["nom"];?></td>
                                 <td><?= $row["client_cat_name"];?></td>
                                 <td><?= $row["email"];?></td>
                                 <td><?= $row["telephone"];?></td>
                                 <td><?= $row["adresse"];?></td>
                                 <td class="text-center">
-                                    <a href="viewclient.php?id=<?= $row["client_id"]; ?>" class="btn btn-outline-info">Voir</a>
+                                    <a href="viewclient.php?id=<?= $row["customer_id"]; ?>" class="btn btn-primary">Voir</a>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-primary editbtn" value="<?= $row["client_id"]; ?>" data-toggle="modal" data-target="#editclient">Modifier</button>
+                                    <button type="button" class="btn btn-primary editbtn" value="<?= $row["customer_id"]; ?>" data-toggle="modal" data-target="#editclient">Modifier</button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -175,16 +183,6 @@ $result2 = $crud2->read($sql2);
                     <div class="form-group">
                         <label for="nom">Nom <span class="text-danger">*</span></label>
                         <input type="text" name="nom" id="nom" class="form-control" required/>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Cat&eacute;gorie <span class="text-danger">*</span></label>
-                        <select name="category" id="category" class="form-control" required/>
-                            <?php 
-                                foreach ($result2 as $key => $row){
-                                    echo "<option value='". $row["client_cat_id"]. "'>" . $row["client_cat_name"] . "</option>";
-                                }
-                            ?>   
-                        </select>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>

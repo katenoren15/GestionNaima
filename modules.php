@@ -53,7 +53,7 @@ if (!$user->get_session()) {
                 </div>
                 <br>
                 <div class="card-deck">
-                    <div class="card" style="background-color:#FFB6C1;">
+                    <div class="card" style="background-color:#e3614d;">
                         <div class="card-body text-center">
                         <img src="icons/cash-stack.svg" width="50" class=""/>
                         <h2 class="">Gestion des Prospects</h2>
@@ -61,15 +61,15 @@ if (!$user->get_session()) {
                         <a href="prospect/index-prospect.php?page=tableau" class="stretched-link"></a>
                         </div>
                     </div>
-                    <div class="card" style="background-color:#6ec1e4;">
+                    <div class="card" style="background-color:#1ab4b6;">
                         <div class="card-body text-center">
                         <img src="icons/people-fill.svg" width="50" class="text-white"/>
                         <h2 class="">Gestion des Clients</h2>
                         <p class="card-text">G&eacute;rez les clients existants et obtenez un historique des achats</p>
-                        <a href="client/index-client.php?page=tableau" class="stretched-link"></a>
+                        <a href="client/index-client.php?page=clients" class="stretched-link"></a>
                         </div>
                     </div>
-                    <div class="card" style="background-color:#95bf6f;">
+                    <div class="card" style="background-color:#8ac063;">
                         <div class="card-body text-center">
                         <img src="icons/box-seam.svg" width="50" class="text-white"/>
                         <h2 class="">Gestion de Stock</h2>
@@ -91,7 +91,7 @@ if (!$user->get_session()) {
                                 <a href="contacts.php" class="stretched-link"></a>
                             </div>
                         </div>
-                        <div class="card" style="background-color:#f1d34e;">
+                        <div class="card" style="background-color:#f9d31e;">
                             <div class="card-body text-center">
                                 <img src="icons/person-fill.svg" width="50" class="text-white"/>
                                 <h2 class="">Mon Compte</h2>

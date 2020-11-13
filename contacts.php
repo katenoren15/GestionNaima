@@ -39,7 +39,7 @@
             <div class="col-sm-12">
                 <div class="table-responsive" id="result">
                     <table class="table table-bordered table-hover">
-                        <thead>
+                        <thead class="thead-light">
                         <tr>
                             <th>N&deg; Contact</th>
                             <th>Nom Complet</th>

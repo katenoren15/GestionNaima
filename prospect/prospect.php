@@ -2,26 +2,41 @@
 include_once "../includes/config.php";
 $crud2 = new Dbcon();
 
-$sql = "SELECT * FROM prospect, client_cat WHERE prospect.categorie = client_cat.client_cat_id";
+$sql = "SELECT * FROM customer, client_cat WHERE customer_type = 'Prospect' AND customer.categorie = client_cat.client_cat_id";
 $result = $crud2->read($sql);
+$results_per_page = 10;
+
+$numRet = $crud2->numRows($sql);
+$number_f_pages = ceil($numRet / $results_per_page);
+
+
+
+
+$starting_limit_num = ($_GET["p"]-1)*$results_per_page;
+$sql2 = "SELECT * FROM customer, client_cat WHERE customer.categorie = client_cat.client_cat_id LIMIT " . $starting_limit_num .',' . $results_per_page;
+$result2 = $crud2->read($sql2);
+
+$sql3 = "SELECT * FROM client_cat";
+$result3 = $crud2->read($sql3);
+
 ?>
 <section>
     <div class="container-fluid">
         <div class="row mt-5">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
-                <div class="jumbotron pt-4 pb-4">
-                    <h1>Prospects</h1>
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
+                <div class="jumbotron card-common pt-4 pb-4 mt-2" >
+                    <h2>Prospects</h2>
                     <nav class="navbar">
-                    <button class="btn btn-primary mt-1 navbar-brand" data-toggle="modal" data-target="#addprosp">&plus;&nbsp;Prospect</button>
+                    <button class="btn btn-warning mt-1 navbar-brand" data-toggle="modal" data-target="#addprosp">&plus;&nbsp;Prospect</button>
                     <form class="form-inline">
-                        <input class="form-control border-primary mr-sm-2" type="search" id="pinput" placeholder="Recherche" aria-label="Search">
+                        <input class="form-control mr-sm-2" style="border:1px solid #e3614d;" type="search" id="pinput" placeholder="Recherche" aria-label="Search">
                     </form>
                 </nav>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center mt-2">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <?php if(isset($_SESSION["response"])){ ?>
                     <div class="alert text-center alert-<?= $_SESSION["res_type"]; ?> alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -31,36 +46,34 @@ $result = $crud2->read($sql);
             </div>
         </div>
         <div class="row mb-5">
-            <div class="col-xl-10 col-lg-9 col-md-8 ml-auto">
+            <div class="col-xl-11 col-lg-11 col-md-11 ml-auto">
                 <div class="table-responsive" id="result">
                     <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th><a class="column_sort" id="billNo" data-order="desc" href="#">Code Prospect</a></th>
-                            <th><a class="column_sort" id="reservationNo" data-order="desc" href="#">Nom</a></th>
-                            <th><a class="column_sort" id="total" data-order="desc" href="#">Prenoms</a></th>
-                            <th><a class="column_sort" id="total" data-order="desc" href="#">Catégorie</a></th>
-                            <th><a class="column_sort" id="billingDate" data-order="desc" href="#">Email</a></th>
-                            <th><a class="column_sort" id="reductions" data-order="desc" href="#">Téléphone</a></th>
-                            <th><a class="column_sort" id="reductions" data-order="desc" href="#">Adresse</a></th>
-                            <th colspan="2">Actions</th>
-                        </tr>
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="text-dark">Code Prospect</th>
+                                <th class="text-dark">Nom</th>
+                                <th class="text-dark">Catégorie</th>
+                                <th class="text-dark">Email</th>
+                                <th class="text-dark">Téléphone</th>
+                                <th class="text-dark">Adresse</th>
+                                <th class="text-dark text-center" colspan="2">Actions</th>
+                            </tr>
                         </thead>
                         <tbody id="prospectTable">
                         <?php foreach($result as $key => $row){ ?>
                             <tr>
-                                <td><?= $row["prospect_id"];?></td>
+                                <td><?= $row["customer_id"];?></td>
                                 <td><?= $row["nom"];?></td>
-                                <td><?= $row["prenoms"];?></td>
                                 <td><?= $row["client_cat_name"];?></td>
                                 <td><?= $row["email"];?></td>
                                 <td><?= $row["telephone"];?></td>
                                 <td><?= $row["adresse"];?></td>
                                 <td class="text-center">
-                                    <a href="viewprospect.php?id=<?= $row["prospect_id"]; ?>" class="btn btn-outline-info">Voir</a>
+                                    <a href="viewprospect.php?id=<?= $row["customer_id"]; ?>" class="btn btn-warning">Voir</a>
                                 </td>
                                 <td class="text-center">
-                                    <button type="button" class="btn btn-outline-primary editbtn" value="<?= $row["prospect_id"]; ?>" data-toggle="modal" data-target="#editprosp">Modifier</button>
+                                    <button type="button" class="btn btn-warning editbtn" value="<?= $row["customer_id"]; ?>" data-toggle="modal" data-target="#editprosp">Modifier</button>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -69,25 +82,20 @@ $result = $crud2->read($sql);
                 </div>
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-end">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1">Previous</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
-    </li>
-  </ul>
-</nav>
+        <ul class="pagination">
+        <?php
+            for($b=1; $b<=$number_f_pages; $b++){
+        ?>
+        
+            <li class="page-item"><a class="page-link" href=" "><?php echo $b ;?></a></li>
+        <?php } ?>
+            </ul>
 
     </div>
 </section>
 <div class="modal fade" id="addprosp">
 
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-center">Ajouter un Prospect</h4>
@@ -99,14 +107,21 @@ $result = $crud2->read($sql);
                     <div class="form-row">
                         <div class="col">
                             <label for="nom">Nom <span class="text-danger">*</span></label>
-                            <input type="text" name="nom" class="form-control datepicker" required/>
+                            <input type="text" name="nom" class="form-control" required/>
                         </div>
                         <div class="col">
-                            <label for="prenoms">Prenoms<span class="text-danger">*</span></label>
-                            <input type="text" name="prenoms" class="form-control datepicker" required/>
+                            <label for="categorie">Cat&eacute;gorie <span class="text-danger">*</span></label>
+                            <select class="form-control" name="categorie" required>
+                                <?php 
+                                    foreach ($result3 as $key => $row){
+                                        echo "<option value='". $row["client_cat_id"]. "'>" . $row["client_cat_name"] . "</option>";
+                                    }
+                                ?>   
+                            </select>
+                           
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="form-row mt-2">
                         <div class="col">
                             <label for="email">Email</label>
                             <input type="email" name="email" class="form-control"/>
@@ -116,7 +131,7 @@ $result = $crud2->read($sql);
                             <input type="text" name="tel" class="form-control" required/>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label for="adresse">Adresse<span class="text-danger">*</span></label>
                         <input type="text" name="adresse" class="form-control" required/>
                     </div>
@@ -186,7 +201,7 @@ $result = $crud2->read($sql);
 </div>
 <div class="modal fade" id="editprosp">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-center">Modifier le Prospect</h4>
@@ -203,8 +218,15 @@ $result = $crud2->read($sql);
                         <input type="text" name="nom" id="nom" class="form-control" required/>
                     </div>
                     <div class="form-group">
-                        <label for="prenoms">Prenoms<span class="text-danger">*</span></label>
-                        <input type="text" name="prenoms" id="prenoms" class="form-control" required/>
+                        <label for="categorie">Cat&eacute;gorie<span class="text-danger">*</span></label>
+                        <select class="form-control" name="categorie" id="categorie" required>
+                            <?php 
+                                foreach ($result3 as $key => $row){
+                                    echo "<option value='". $row["client_cat_id"]. "'>". $row["client_cat_name"] . "</option>";
+                                }
+                            ?>  
+                        </select>
+                        
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -256,7 +278,7 @@ $(document).ready(function(){
 
             $('#id').val(data[0]);
             $('#nom').val(data[1]);
-            $('#prenoms').val(data[2]);
+            $('#categorie').val(data[2]);
             $('#email').val(data[3]);
             $('#tel').val(data[4]);
             $('#adresse').val(data[5]);
