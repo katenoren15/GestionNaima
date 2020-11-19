@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-$userid = $_SESSION["user"];
+//$userid = $_SESSION["user"];
 
 //$file = "check.txt";
 //$text = file_get_contents($file);
@@ -15,7 +15,7 @@ $userid = $_SESSION["user"];
     //header("location:index1.php?page=tableau");
   //  header('location:installer.php');
 //} else {
-    if ($_SESSION["login"] = true) {
+    if ($_SESSION["login"] = false) {
         header("location:login.php");
     } else {
         header("location:modules.php");
