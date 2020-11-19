@@ -9,13 +9,13 @@ session_start();
 
         public function connect(){
 
-            $config_file = "config.ini";
-            $config = parse_ini_file($config_file);
+            //$config_file = "config.ini";
+            //$config = parse_ini_file($config_file);
 
-            $this->servername = $config[host];
-            $this->username = $config[user];
-            $this->password = $config[pass];
-            $this->dbname = $config[dbname];
+            $this->servername = 'us-cdbr-east-02.cleardb.com';
+            $this->username = 'b269cf6b7e7ba1';
+            $this->password = 'e4483984';
+            $this->dbname = 'heroku_b82e26d4e33b016';
 
             $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
 
